@@ -6,44 +6,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
+public class IngredientCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    private User customer;
+    private String name;
 
     @JsonIgnore
     @ManyToOne
     private Restaurant restaurant;
 
-    private Long totalAmount;
-
-    private String orderStatus;
-
-    private Date createAt;
-
-    @ManyToOne
-    private Address deliveryAddress;
-
-    @OneToMany
-    private List<OrderItem> items;
-
- //   private Payment payment;
-
-    private int totalItem;
-
-    private int totalPrice;
-
-
-
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<IngredientsItem> ingredientsItems = new ArrayList<>();
 }
