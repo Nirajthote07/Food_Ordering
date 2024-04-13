@@ -9,9 +9,11 @@ import com.sky.repository.CartRepository;
 import com.sky.repository.FoodRepository;
 import com.sky.request.AddCartItemRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class CartServiceImp implements CartService{
 
     @Autowired
@@ -60,7 +62,7 @@ public class CartServiceImp implements CartService{
     public CartItem updateCartItemQuantity(Long cartItemId, int quantity) throws Exception {
 
         Optional<CartItem> cartItemOptional = cartItemRepository.findById(cartItemId);
-        if(cartItem.isEmpty())
+        if(cartItemOptional.isEmpty())
             throw new Exception("CartItem not Found");
 
         CartItem cartItem = cartItemOptional.get();
@@ -110,18 +112,21 @@ public class CartServiceImp implements CartService{
     }
 
     @Override
-    public Cart findCartByUserId(String jwt) throws Exception {
+    public Cart findCartByUserId(Long userId) throws Exception {
 
-        User user = userService.findUserByJwtToken(jwt);
+       // User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartRepository.findByCustomerId(userId);
+        cart.setTotal(calculateCartTotals(cart));
 
-        return cartRepository.findByCustomerId(user.getId());
+        return cart;
+
     }
 
     @Override
-    public Cart clearCart(String jwt) throws Exception {
+    public Cart clearCart(Long userId) throws Exception {
 
-        User user = userService.findUserByJwtToken(jwt);
-        Cart cart = findCartByUserId(jwt);
+       // User user = userService.findUserByJwtToken(jwt);
+        Cart cart = findCartByUserId(userId);
 
         cart.getItem().clear();
         cart.setTotal(0L);
