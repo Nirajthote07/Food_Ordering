@@ -7,7 +7,7 @@ const restaurant = [1,1,1,1,1,1,1,1,1]
 
 const Home = () => {
   return (
-    <div className=''>
+    <div className='pb-10'>
 
         <section className='banner -z-50 relative flex flex-col items-center justify-center'>
 
