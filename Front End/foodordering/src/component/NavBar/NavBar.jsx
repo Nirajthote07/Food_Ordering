@@ -8,11 +8,23 @@ import { pink } from '@mui/material/colors';
 import './NavBar.css';
 import { Person } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const NavBar = () => {
 
+    const {auth} = useSelector(store => store);
 
     const navigate = useNavigate();
+
+    const handleAvatarClick = () =>{
+        if(auth.user?.role === "ROLE_CUSTOMER"){
+            navigate('/my-profile');
+        }
+        else{
+            navigate('/admin/restaurant');
+        }
+    };
+
 
   return (
     <div className='px-5 sticky top-0 z-50 py-[.8rem] bg-[#e91e63] lg:px-20 flex justify-between'>
@@ -20,7 +32,7 @@ const NavBar = () => {
 
             <div className='lg:mr-10 cursor-pointer flex items-center space-x-4 '>
 
-                <li className='logo font-semibold text-gray-300 text-2xl'>
+                <li onClick={() =>navigate("/")} className='logo font-semibold text-gray-300 text-2xl'>
                     Sky-Food
                 </li>
 
@@ -37,12 +49,12 @@ const NavBar = () => {
 
                 <div>
 
-                   { false ?  <Avatar sx={{bgcolor:"white",color:pink.A400}}>
-                                 C
-                             </Avatar> 
-                         :  <IconButton onClick={() => navigate("/account/login")}>
-                            <Person/>
-                         </IconButton>
+                   { auth.user ? ( <Avatar onClick={handleAvatarClick} sx={{bgcolor:"white",color:pink.A400}}>
+                                 {auth.user?.fullName[0].toUpperCase()}
+                             </Avatar> )
+                         : ( <IconButton onClick={() => navigate("/account/login")}>
+                         <Person/>
+                      </IconButton>)
                     }
                     
                 </div>
