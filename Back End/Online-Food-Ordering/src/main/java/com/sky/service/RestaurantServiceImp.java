@@ -30,7 +30,14 @@ public class RestaurantServiceImp implements RestaurantService{
     @Override
     public Restaurant createRestaurant(CreateRestaurantRequest req, User user) {
 
-        Address address = addressRepository.save(req.getAddress());
+        Address address=new Address();
+        address.setCity(req.getAddress().getCity());
+        address.setCountry(req.getAddress().getCountry());
+        address.setFullName(req.getAddress().getFullName());
+        address.setPostalCode(req.getAddress().getPostalCode());
+        address.setState(req.getAddress().getState());
+        address.setStreetAddress(req.getAddress().getStreetAddress());
+        Address savedAddress = addressRepository.save(address);
 
         Restaurant restaurant = new Restaurant();
         restaurant.setAddress(address);
@@ -113,7 +120,7 @@ public class RestaurantServiceImp implements RestaurantService{
 
         RestaurantDto dto = new RestaurantDto();
         dto.setDescription(restaurant.getDescription());
-        dto.setImage(restaurant.getImages());
+        dto.setImages(restaurant.getImages());
         dto.setTitle(restaurant.getName());
         dto.setId(restaurantId);
 
