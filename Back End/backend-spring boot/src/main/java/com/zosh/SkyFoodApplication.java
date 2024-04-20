@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ZoshFoodApplication {
+public class SkyFoodApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ZoshFoodApplication.class, args);
+		SpringApplication.run(SkyFoodApplication.class, args);
 	}
 
 }
