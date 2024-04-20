@@ -1,9 +1,0 @@
-package com.sky.repository;
-
-import com.sky.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface UserRepository extends JpaRepository<User,Long> {
-
-    public User findByEmail(String username);
-}

@@ -1,38 +1,42 @@
-// import logo from './logo.svg';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import './App.css';
-import NavBar from './component/NavBar/NavBar';
-import { darkTheme } from './Theme/DarkTheme';
-//import Home from './component/Home/Home';
-//import RestaurantDetails from './component/Restaurant/RestaurantDetails';
-import Cart from './component/Cart/Cart';
-import Profile from './component/Profile/Profile';
-import CustomerRouter from './Routers/CustomerRouter';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from './component/State/Authentication/Action';
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import "./App.css";
+
+import darkTheme from "./theme/DarkTheme";
+import Routers from "./Routers/Routers";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getUser } from "./State/Authentication/Action";
+import { findCart } from "./State/Customers/Cart/cart.action";
+import {
+  getAllRestaurantsAction,
+  getRestaurantById,
+  getRestaurantByUserId,
+} from "./State/Customers/Restaurant/restaurant.action";
 
 function App() {
-
-   const dispatch = useDispatch();
-   const jwt = localStorage.getItem('jwt');
-   const {auth} = useSelector(store => store);
-
-
-   useEffect(() =>{
-      dispatch(getUser(auth.jwt || jwt));
-   },[auth.jwt])
-
-
-
-
-  return (
+  const dispatch = useDispatch();
+  const { auth } = useSelector((store) => store);
+  const jwt = localStorage.getItem("jwt");
+  
+  useEffect(() => {
     
-     <ThemeProvider theme={darkTheme}>
-      <CssBaseline/>
-        <CustomerRouter />
+    if (jwt) {
+      dispatch(getUser(jwt));
+      dispatch(findCart(jwt));
+      dispatch(getAllRestaurantsAction(jwt));
+    }
+  }, [auth.jwt]);
 
-     </ThemeProvider>
+  useEffect(() => {
+    if (auth.user?.role == "ROLE_RESTAURANT_OWNER") {
+      dispatch(getRestaurantByUserId(auth.jwt || jwt));
+    }
+  }, [auth.user]);
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Routers />
+    </ThemeProvider>
   );
 }
 
